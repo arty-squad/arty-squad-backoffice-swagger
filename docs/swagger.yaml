@@ -45,11 +45,12 @@ components:
           type: string
       example:
         _id: 67d2bc99f0a0730d916a3fca
-        email: testartysquad+backoffice@gmail.com
+        email: test@artysquad.com
         uid: E0oVVP9aXqNpMwBeKThAkZXuuI33
         name: test
         createdAt: '2025-03-10T00:00:00Z'
         role: admin
+
     Activity:
       type: object
       properties:
@@ -83,6 +84,11 @@ components:
                   end:
                     type: string
                     format: HH:MM
+                  bookingIds:
+                    type: array
+                    items:
+                      type: string
+                    nullable: true
                   recurring:
                     type: boolean
                   recurring_first_date:
@@ -98,7 +104,6 @@ components:
                     minimum: 2
                     maximum: 15
                     nullable: true
-                
       example:
         _id: 67b474b2847affd92f166c62
         name: '[Happy Paint] Apéro peinture et plaisir dans le 9ème'
@@ -110,18 +115,21 @@ components:
             - dateStr: '2025-02-01'
               start: '17:00'
               end: '20:00'
+              bookingIds: []
               recurring: false
           '2025-02-15':
             - dateStr: '2025-02-15'
               start: '17:00'
               end: '20:00'
               recurring: false
+              bookingIds: ["67d2bfef8538cd94cfef73da"]
           '2025-03-15':
             - dateStr: '2025-03-15'
               start: '17:00'
               end: '20:00'
               recurring: false
-                           
+              bookingIds: []
+
     Booking:
       type: object
       properties:
@@ -129,18 +137,99 @@ components:
           type: string
         activity_id:
           type: string
+        name_experience:
+          type: string
+        partner_id:
+          type: string
+        name_partner:
+          type: string
+          nullable: true
+        partner_email:
+          type: string
+          format: email
+        duration_in_minutes:
+          type: string
+        activity_address:
+          type: string
+        activity_date:
+          type: string
+          format: date
+        activity_date_formated:
+          type: string
+          description: Formatted as dd/mm/yyyy
+          pattern: '^\d{2}/\d{2}/\d{4}$'
+        creation_date:
+          type: string
+          format: date-time
+        creation_date_formated:
+          type: string
+          description: Formatted as dd/mm/yyyy
+          pattern: '^\d{2}/\d{2}/\d{4}$'
+        activity_start:
+          type: string
+          format: HH:MM
+          pattern: '^\d{2}:\d{2}$'
+        activity_end:
+          type: string
+          format: HH:MM
+          pattern: '^\d{2}:\d{2}$'
+        price_per_person:
+          type: integer
+        quantity:
+          type: integer
+        total_price:
+          type: integer
+        customer_email:
+          type: string
+          format: email
         customer_name:
           type: string
-        customer_email:
+        customer_phone:
+          type: string
+        customer_address:
+          type: string
+        code_used:
+          type: string
+        amount_discount:
+          type: string
+        stripe_checkout_id:
+          type: string
+        access_code:
+          type: string
+        invoice_id:
           type: string
         status:
           type: string
+          enum: [to_validate, confirmed, cancelled, reported]
       example:
-        _id: 67c048d32260a92ebde8b95b
-        activity_id: 67b474b0847affd92f166c60
-        customer_name: Test Booking
-        customer_email: lk.lapidus@gmail.com
-        status: to_validate
+        _id: "67d2bfef8538cd94cfef73da"
+        activity_id: "67b474b0847affd92f166c60"
+        name_experience: "Voyage hypnotique au musée de l’art cinétique"
+        partner_id: "67ab424802a0c72b69aaf398"
+        name_partner: "Partner name"
+        partner_email: "contact@partner.com"
+        duration_in_minutes: "75"
+        activity_address: "1 RUE DU TEST, 93300 AUBERVILLIERS"
+        activity_date: "2025-05-10"
+        activity_date_formated: "10/05/2025"
+        creation_date: "2025-04-12"
+        creation_date_formated: "12/04/2025"
+        activity_start: "15:30"
+        activity_end: "16:45"
+        price_per_person: 14
+        quantity: 1
+        total_price: 14
+        customer_email: "alice.doe@gmail.com"
+        customer_name: "Alice Doe"
+        customer_phone: "+33601020304"
+        customer_address: "5 rue curial"
+        code_used: ""
+        amount_discount: 0
+        stripe_checkout_id: "evt_1R29qARvqugAG1P7hgvED8ef"
+        access_code: "818a7619-d699-46eb-8897-789da112244d"
+        invoice_id: "67d2bfed8d3923d4e02e8f51"
+        status: "to_validate"
+
     CompanyOrder:
       type: object
       properties:
@@ -154,6 +243,7 @@ components:
         _id: 67c045fa2260a92ebde8b959
         company_name: Dupond
         status: valid
+
     Company:
       type: object
       properties:
@@ -167,6 +257,7 @@ components:
         _id: 67c045d32260a92ebde8b958
         company_name: Dupond
         email_contact: lukas@artysquad.com
+
     Invoice:
       type: object
       properties:
@@ -174,24 +265,75 @@ components:
           type: string
         invoice_id:
           type: string
-        partner_id:
+        due_date:
           type: string
+        creation_date:
+          type: string
+        activity_start:
+          type: string
+          format: HH:MM
+        activity_end:
+          type: string
+          format: HH:MM
         customer_name:
           type: string
+        customer_country:
+          type: string
+          maxLength: 2
+        customer_phone:
+          type: string
+        customer_email:
+          type: string
+          format: email
+        experience_name:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: number
+        unit_price:
+          type: number
+        subtotal:
+          type: number
+        discount:
+          type: number
         total:
           type: number
         vat:
           type: number
+        partner_name:
+          type: string
+        partner_mail:
+          type: string
+          format: email
+        partner_phone:
+          type: string
         link:
           type: string
       example:
-        _id: 67d94cf27333fca42baf1e4e
-        invoice_id: F25AS-ATELIERPIGEONCOQ-030001
-        partner_id: 67ab424f02a0c72b69aaf3a7
-        customer_name: Lapidus
-        total: 178.00
-        vat: 29.67
+        _id: "67d303779eb4659fb7df77c8"
+        invoice_id: "F25AS-PARTENAIRE-030001"
+        due_date: "2025-03-13"
+        creation_date: "2025-03-13"
+        activity_start: "12:00"
+        activity_end: "14:00"
+        customer_name: "Jean Dupont"
+        customer_country: "FR"
+        customer_phone: "+33600000000"
+        customer_email: "jean.dupont@example.com"
+        experience_name: "Atelier créatif en cuir personnalisé"
+        description: "Tout le matériel est fourni sur place.\nUn atelier est disponible dans vos locaux et privatisé."
+        quantity: 1
+        unit_price: 139
+        subtotal: 139
+        discount: 0
+        total: 139
+        vat: 23.17
+        partner_name: "Nom du Partenaire"
+        partner_mail: "contact@partenaire.com"
+        partner_phone: "09 00 00 00 00"
         link: https://storage.googleapis.com/arty_squad_all_files/artysquad-assets/dev/openapi_v1.yaml
+
     InvoiceRecap:
       type: object
       properties:
@@ -201,6 +343,8 @@ components:
           type: string
         partner_id:
           type: string
+        subtotal:
+          type: number
         total:
           type: number
         vat:
@@ -211,7 +355,8 @@ components:
         _id: 67d94cf27333fca42baf1e4e
         month: "2025-02"
         partner_id: 67ab424f02a0c72b69aaf3a7
-        total: 178.00
+        subtotal: 178
+        total: 178
         vat: 29.67
         link: https://storage.googleapis.com/arty_squad_all_files/artysquad-assets/dev/openapi_v1.yaml
 
@@ -272,7 +417,7 @@ components:
         _id: 67c5b136a03273cb23e6dd75
         code: DUPOND_001_15346453
         code_status: available
-        email: gregchikhani@me.com
+        email: customer@gmail.com
 
 security: &secAdmin
 - BearerAuthAdmin: []
@@ -610,6 +755,47 @@ paths:
       tags:
       - 'Bookings (admin role)'
       parameters: *paramID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activity_id:
+                  type: string
+                activity_date:
+                  type: string
+                  format: date
+                activity_start:
+                  type: string
+                  format: HH:MM
+                  pattern: '^\d{2}:\d{2}$'
+                price_per_person:
+                  type: integer
+                quantity:
+                  type: integer
+                customer_email:
+                  type: string
+                  format: email
+                customer_name:
+                  type: string
+                customer_phone:
+                  type: string
+                customer_address:
+                  type: string
+                code_used:
+                  type: string
+                amount_discount:
+                  type: string
+                stripe_checkout_id:
+                  type: string
+                access_code:
+                  type: string
+                invoice_id:
+                  type: string
+                status:
+                  type: string
+                  enum: [to_validate, confirmed, cancelled, reported]
       security: *secAdmin
       responses:
         '200':
