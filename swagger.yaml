@@ -1,0 +1,781 @@
+openapi: 3.0.0
+info:
+  title: Artysquad Backend API
+  version: 1.0.0
+  description: Automatically generated Swagger documentation for all MongoDB collections
+servers:
+- url: https://api.artysquad.com/v1
+  description: Production Server
+components:
+  securitySchemes:
+    BearerAuthAdmin:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Firebase Authentication (JWT). 
+        Include your Firebase ID token in the `Authorization` header as: 
+        `Bearer <Firebase ID Token>`. 
+        Only users with `role: admin` are allowed.
+    BearerAuthPartner:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Firebase Authentication (JWT). 
+        Include your Firebase ID token in the `Authorization` header as: 
+        `Bearer <Firebase ID Token>`. 
+        Only users with `role: partner` or `role: admin` are allowed.  
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+        uid:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        role:
+          type: string
+      example:
+        _id: 67d2bc99f0a0730d916a3fca
+        email: testartysquad+backoffice@gmail.com
+        uid: E0oVVP9aXqNpMwBeKThAkZXuuI33
+        name: test
+        createdAt: '2025-03-10T00:00:00Z'
+        role: admin
+    Activity:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        city:
+          type: string
+        postal_code:
+          type: string
+        price_per_person:
+          type: string
+        sessions_calendar:
+          type: object
+          properties:
+            yyyy-mm-dd:
+              type: array
+              items:
+                type: object
+                properties:
+                  dateStr:
+                    type: string
+                    format: date
+                  dateJS:
+                    type: string
+                    format: date-time
+                  start:
+                    type: string
+                    format: HH:MM
+                  end:
+                    type: string
+                    format: HH:MM
+                  recurring:
+                    type: boolean
+                  recurring_first_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  recurring_period:
+                    type: string
+                    enum: [week, month, day]
+                    nullable: true
+                  recurring_quantity:
+                    type: integer
+                    minimum: 2
+                    maximum: 15
+                    nullable: true
+                
+      example:
+        _id: 67b474b2847affd92f166c62
+        name: '[Happy Paint] Apéro peinture et plaisir dans le 9ème'
+        city: Paris
+        postal_code: '75009'
+        price_per_person: '39'
+        sessions_calendar:
+          '2025-02-01':
+            - dateStr: '2025-02-01'
+              start: '17:00'
+              end: '20:00'
+              recurring: false
+          '2025-02-15':
+            - dateStr: '2025-02-15'
+              start: '17:00'
+              end: '20:00'
+              recurring: false
+          '2025-03-15':
+            - dateStr: '2025-03-15'
+              start: '17:00'
+              end: '20:00'
+              recurring: false
+                           
+    Booking:
+      type: object
+      properties:
+        _id:
+          type: string
+        activity_id:
+          type: string
+        customer_name:
+          type: string
+        customer_email:
+          type: string
+        status:
+          type: string
+      example:
+        _id: 67c048d32260a92ebde8b95b
+        activity_id: 67b474b0847affd92f166c60
+        customer_name: Test Booking
+        customer_email: lk.lapidus@gmail.com
+        status: to_validate
+    CompanyOrder:
+      type: object
+      properties:
+        _id:
+          type: string
+        company_name:
+          type: string
+        status:
+          type: string
+      example:
+        _id: 67c045fa2260a92ebde8b959
+        company_name: Dupond
+        status: valid
+    Company:
+      type: object
+      properties:
+        _id:
+          type: string
+        company_name:
+          type: string
+        email_contact:
+          type: string
+      example:
+        _id: 67c045d32260a92ebde8b958
+        company_name: Dupond
+        email_contact: lukas@artysquad.com
+    Invoice:
+      type: object
+      properties:
+        _id:
+          type: string
+        invoice_id:
+          type: string
+        partner_id:
+          type: string
+        customer_name:
+          type: string
+        total:
+          type: number
+        vat:
+          type: number
+        link:
+          type: string
+      example:
+        _id: 67d94cf27333fca42baf1e4e
+        invoice_id: F25AS-ATELIERPIGEONCOQ-030001
+        partner_id: 67ab424f02a0c72b69aaf3a7
+        customer_name: Lapidus
+        total: 178.00
+        vat: 29.67
+        link: https://storage.googleapis.com/arty_squad_all_files/artysquad-assets/dev/openapi_v1.yaml
+    InvoiceRecap:
+      type: object
+      properties:
+        _id:
+          type: string
+        month:
+          type: string
+        partner_id:
+          type: string
+        total:
+          type: number
+        vat:
+          type: number
+        link:
+          type: string
+      example:
+        _id: 67d94cf27333fca42baf1e4e
+        month: "2025-02"
+        partner_id: 67ab424f02a0c72b69aaf3a7
+        total: 178.00
+        vat: 29.67
+        link: https://storage.googleapis.com/arty_squad_all_files/artysquad-assets/dev/openapi_v1.yaml
+
+    Partner:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        city:
+          type: string
+        slug:
+          type: string
+        bio:
+          type: string
+        address:
+          type: string
+        website:
+          type: string
+      example:
+        _id: 67ab424f02a0c72b69aaf3a7
+        name: Fluffy's
+        email: fluffys.in.paris@gmail.com
+        city: Paris, France
+        slug: fluffys
+        bio: Diplômée d’un CAP Pâtisserie à l’école Ferrandi et d’un master 2 Entreprenariat en école de commerce, Hortense commence sa carrière au prestigieux...
+        address: '44 rue de Cléry'
+        website: https://www.fluffysparis.com/
+        
+    PartnerCode:
+      type: object
+      properties:
+        _id:
+          type: string
+        code:
+          type: string
+        status:
+          type: string
+      example:
+        _id: 67c035c6f6793c078354c876
+        code: FAUX_CODE_9LWAE0S2
+        status: used
+    VoucherCode:
+      type: object
+      properties:
+        _id:
+          type: string
+        code:
+          type: string
+        code_status:
+          type: string
+        email:
+          type: string
+      example:
+        _id: 67c5b136a03273cb23e6dd75
+        code: DUPOND_001_15346453
+        code_status: available
+        email: gregchikhani@me.com
+
+security: &secAdmin
+- BearerAuthAdmin: []
+
+paths:
+  /users:
+    get:
+      summary: List all users
+      tags:
+      - 'Users (admin role)'
+      security: *secAdmin
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+    post:
+      summary: Create a new user
+      tags:
+      - 'Users (admin role)'
+      security: *secAdmin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, name, role]
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                role:
+                  type: string
+                partner_id:
+                  type: string
+              example:
+                email: testartysquad+backoffice@gmail.com
+                name: Arty Squad
+                role: admin
+                partner_id: ""
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+  /users/{id}:
+    put:
+      summary: Update user informations
+      tags:
+      - 'Users (admin role)'
+      security: *secAdmin
+      parameters: &paramID
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                role:
+                  type: string
+                partner_id:
+                  type: string
+              example:
+                email: testartysquad+backoffice@gmail.com
+                name: Arty Squad
+                role: admin
+                partner_id: ""
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+    delete:
+      summary: Delete user
+      tags:
+      - 'Users (admin role)'
+      security: *secAdmin
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+  /partners:
+    get:
+      summary: List all partners
+      tags:
+      - 'Partners (admin role)'
+      security: *secAdmin
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Partner'
+  /partners/{id}:
+    get:
+      summary: View partner profile
+      tags:
+      - 'Partners (partner role)'
+      security: &secPartner
+      - BearerAuthPartner: []
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Partner'
+    put:
+      summary: Update partner profile
+      tags:
+      - 'Partners (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                city:
+                  type: string
+                slug:
+                  type: string
+                bio:
+                  type: string
+                address:
+                  type: string
+                website:
+                  type: string
+                siret:
+                  type: string
+                naf:
+                  type: string
+                vat:
+                  type: number
+                  enum: [0, 5.5, 10, 20]
+      responses:
+        '200':
+          description: Success
+  /activities:
+    get:
+      summary: List activities
+      tags:
+      - 'Activities (admin role)'
+      - 'Activities (partner role)'
+      security: *secPartner
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Activity'
+  /activities/{id}:
+    get:
+      summary: View activity details
+      tags:
+      - 'Activities (admin role)'
+      - 'Activities (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+  /activities/{id}/calendar/add:
+    put:
+      summary: Add session(s) to activity calendar
+      tags:
+      - 'Activities (admin role)'
+      - 'Activities (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [date, start]
+              properties:
+                date:
+                  type: string
+                start:
+                  type: string
+              example:
+                date: "2025-04-15"
+                start: "15:00"
+      responses:
+        '200':
+          description: Success
+  /activities/{id}/calendar/edit:
+    put:
+      summary: Edit session(s) in activity calendar
+      tags:
+      - 'Activities (admin role)'
+      - 'Activities (partner role)'
+      security: *secPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [date, start]
+              properties:
+                new_activity_id:
+                  type: string
+                date:
+                  type: string
+                  format: date
+                start:
+                  type: string
+              example:
+                new_activity_id: 67c035c6f6793c078354c876
+                date: "2025-04-15"
+                start: "15:00"
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+  /activities/{id}/calendar/delete:
+    put:
+      summary: Delete session(s) from activity calendar
+      tags:
+      - 'Activities (admin role)'
+      - 'Activities (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [date, start]
+              properties:
+                date:
+                  type: string
+                start:
+                  type: string
+              example:
+                date: "2025-04-15"
+                start: "15:00"
+      responses:
+        '200':
+          description: Success
+  /bookings:
+    get:
+      summary: List all bookings (filterable)
+      tags:
+      - 'Bookings (admin role)'
+      - 'Bookings (partner role)'
+      security: *secPartner
+      parameters:
+        - name: time
+          in: query
+          description: Filter bookings by time ("past" or "future")
+          required: false
+          schema:
+            type: string
+            enum: [past, future]
+        - name: status
+          in: query
+          description: Filter bookings by status (e.g., to_validate, confirmed)
+          required: false
+          schema:
+            type: string
+            enum: [to_validate, confirmed, cancelled, reported]
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+  /bookings/{id}:
+    get:
+      summary: View booking
+      tags:
+      - 'Bookings (admin role)'
+      security: *secAdmin
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+    put:
+      summary: Update booking
+      tags:
+      - 'Bookings (admin role)'
+      parameters: *paramID
+      security: *secAdmin
+      responses:
+        '200':
+          description: Success
+  /bookings/{id}/validate:
+    put:
+      summary: Validate booking
+      tags:
+      - 'Bookings (admin role)'
+      - 'Bookings (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+  /bookings/{id}/cancel:
+    put:
+      summary: Cancel booking
+      tags:
+      - 'Bookings (admin role)'
+      - 'Bookings (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+  /bookings/{id}/report:
+    put:
+      summary: Report booking
+      tags:
+      - 'Bookings (admin role)'
+      - 'Bookings (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+  /voucher_codes:
+    get:
+      summary: List all voucher codes
+      tags:
+      - 'Voucher Codes (admin role)'
+      security: *secAdmin
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VoucherCode'
+  /voucher_codes/{id}:
+    put:
+      summary: Update a voucher code
+      tags:
+      - 'Voucher Codes (admin role)'
+      security: *secAdmin
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+    delete:
+      summary: Delete a voucher code
+      tags:
+      - 'Voucher Codes (admin role)'
+      security: *secAdmin
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+  /partner_codes:
+    get:
+      summary: List partner codes
+      tags:
+      - 'Partner Codes (admin role)'
+      - 'Voucher Codes (partner role)'
+      security: *secPartner
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerCode'
+    post:
+      summary: Create new partner codes
+      tags:
+      - 'Partner Codes (admin role)'
+      - 'Voucher Codes (partner role)'
+      security: *secPartner
+      responses:
+        '200':
+          description: Success
+  /partner_codes/{id}:
+    put:
+      summary: Update a partner code
+      tags:
+      - 'Partner Codes (admin role)'
+      security: *secAdmin
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+  /invoices:
+    get:
+      summary: List all invoices
+      tags:
+      - 'Invoices (admin role)'
+      - 'Invoices (partner role)'
+      security: *secPartner
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+  /invoices/{id}:
+    get:
+      summary: Get invoice details
+      tags:
+      - 'Invoices (admin role)'
+      - 'Invoices (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /invoice_recap:
+    get:
+      summary: List monthly invoice recaps
+      tags:
+      - 'Invoice Recaps (admin role)'
+      - 'Invoice Recaps (partner role)'
+      security: *secPartner
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceRecap'
+  /invoice_recap/{id}:
+    get:
+      summary: Get invoice recap
+      tags:
+      - 'Invoice Recaps (admin role)'
+      - 'Invoice Recaps (partner role)'
+      security: *secPartner
+      parameters: *paramID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceRecap'
+
