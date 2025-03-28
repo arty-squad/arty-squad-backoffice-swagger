@@ -484,10 +484,9 @@ security: &secAdmin
 paths:
   /users:
     get:
-      summary: List all users
+      summary: 'List all users (role: admin)'
       tags:
-      - 'Users (admin role)'
-      security: *secAdmin
+      - 'Users'
       responses:
         '200':
           description: Success
@@ -502,9 +501,9 @@ paths:
         '401':
           description: Unauthorized
     post:
-      summary: Create a new user
+      summary: 'Create a new user (role: admin)'
       tags:
-      - 'Users (admin role)'
+      - 'Users'
       security: *secAdmin
       requestBody:
         required: true
@@ -536,9 +535,9 @@ paths:
           description: Unauthorized
   /users/{id}:
     put:
-      summary: Update user informations
+      summary: 'Update user informations (role: admin)'
       tags:
-      - 'Users (admin role)'
+      - 'Users'
       security: *secAdmin
       parameters: &paramID
       - name: id
@@ -574,9 +573,9 @@ paths:
         '401':
           description: Unauthorized
     delete:
-      summary: Delete user
+      summary: 'Delete user (role: admin)'
       tags:
-      - 'Users (admin role)'
+      - 'Users'
       security: *secAdmin
       parameters: *paramID
       responses:
@@ -588,9 +587,9 @@ paths:
           description: Unauthorized
   /partners:
     get:
-      summary: List all partners
+      summary: 'List all partners (role: admin)'
       tags:
-      - 'Partners (admin role)'
+      - 'Partners'
       security: *secAdmin
       responses:
         '200':
@@ -603,9 +602,9 @@ paths:
                   $ref: '#/components/schemas/Partner'
   /partners/{id}:
     get:
-      summary: View partner profile
+      summary: 'View partner profile (role: partner)'
       tags:
-      - 'Partners (partner role)'
+      - 'Partners'
       security: &secPartner
       - BearerAuthPartner: []
       parameters: *paramID
@@ -617,9 +616,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Partner'
     put:
-      summary: Update partner profile
+      summary: 'Update partner profile (role: partner)'
       tags:
-      - 'Partners (partner role)'
+      - 'Partners'
       security: *secPartner
       parameters: *paramID
       requestBody:
@@ -653,10 +652,9 @@ paths:
           description: Success
   /activities:
     get:
-      summary: List activities
+      summary: 'List activities (role: admin || partner)'
       tags:
-      - 'Activities (admin role)'
-      - 'Activities (partner role)'
+      - 'Activities'
       security: *secPartner
       responses:
         '200':
@@ -669,10 +667,9 @@ paths:
                   $ref: '#/components/schemas/Activity'
   /activities/{id}:
     get:
-      summary: View activity details
+      summary: 'View activity details (role: admin || partner)'
       tags:
-      - 'Activities (admin role)'
-      - 'Activities (partner role)'
+      - 'Activities'
       security: *secPartner
       parameters: *paramID
       responses:
@@ -684,10 +681,9 @@ paths:
                 $ref: '#/components/schemas/Activity'
   /activities/{id}/calendar/add:
     put:
-      summary: Add session(s) to activity calendar
+      summary: 'Add session(s) to activity calendar (role: admin || partner)'
       tags:
-      - 'Activities (admin role)'
-      - 'Activities (partner role)'
+      - 'Activities'
       security: *secPartner
       parameters: *paramID
       requestBody:
@@ -710,10 +706,9 @@ paths:
           description: Success
   /activities/{id}/calendar/edit:
     put:
-      summary: Edit session(s) in activity calendar
+      summary: 'Edit session(s) in activity calendar (role: admin || partner)'
       tags:
-      - 'Activities (admin role)'
-      - 'Activities (partner role)'
+      - 'Activities'
       security: *secPartner
       requestBody:
         required: true
@@ -740,10 +735,9 @@ paths:
           description: Success
   /activities/{id}/calendar/delete:
     put:
-      summary: Delete session(s) from activity calendar
+      summary: 'Delete session(s) from activity calendar (role: admin || partner)'
       tags:
-      - 'Activities (admin role)'
-      - 'Activities (partner role)'
+      - 'Activities'
       security: *secPartner
       parameters: *paramID
       requestBody:
@@ -766,10 +760,9 @@ paths:
           description: Success
   /bookings:
     get:
-      summary: List all bookings (filterable)
+      summary: 'List all bookings - filterable by time or status (role: admin || partner)'
       tags:
-      - 'Bookings (admin role)'
-      - 'Bookings (partner role)'
+      - 'Bookings'
       security: *secPartner
       parameters:
         - name: time
@@ -797,9 +790,9 @@ paths:
                   $ref: '#/components/schemas/Booking'
   /bookings/{id}:
     get:
-      summary: View booking
+      summary: 'View booking (role: admin)'
       tags:
-      - 'Bookings (admin role)'
+      - 'Bookings'
       security: *secAdmin
       parameters: *paramID
       responses:
@@ -810,9 +803,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Booking'
     put:
-      summary: Update booking
+      summary: 'Update booking (role: admin)'
       tags:
-      - 'Bookings (admin role)'
+      - 'Bookings'
       parameters: *paramID
       requestBody:
         content:
@@ -861,10 +854,9 @@ paths:
           description: Success
   /bookings/{id}/validate:
     put:
-      summary: Validate booking
+      summary: 'Validate booking (role: admin || partner)'
       tags:
-      - 'Bookings (admin role)'
-      - 'Bookings (partner role)'
+      - 'Bookings'
       security: *secPartner
       parameters: *paramID
       responses:
@@ -872,10 +864,9 @@ paths:
           description: Success
   /bookings/{id}/cancel:
     put:
-      summary: Cancel booking
+      summary: 'Cancel booking (role: admin || partner)'
       tags:
-      - 'Bookings (admin role)'
-      - 'Bookings (partner role)'
+      - 'Bookings'
       security: *secPartner
       parameters: *paramID
       responses:
@@ -883,10 +874,9 @@ paths:
           description: Success
   /bookings/{id}/report:
     put:
-      summary: Report booking
+      summary: 'Report booking (role: admin || partner)'
       tags:
-      - 'Bookings (admin role)'
-      - 'Bookings (partner role)'
+      - 'Bookings'
       security: *secPartner
       parameters: *paramID
       responses:
@@ -894,9 +884,9 @@ paths:
           description: Success
   /voucher_codes:
     get:
-      summary: List all voucher codes
+      summary: 'List all voucher codes (role: admin)'
       tags:
-      - 'Voucher Codes (admin role)'
+      - 'Voucher Codes'
       security: *secAdmin
       responses:
         '200':
@@ -909,18 +899,18 @@ paths:
                   $ref: '#/components/schemas/VoucherCode'
   /voucher_codes/{id}:
     put:
-      summary: Update a voucher code
+      summary: 'Update a voucher code (role: admin)'
       tags:
-      - 'Voucher Codes (admin role)'
+      - 'Voucher Codes'
       security: *secAdmin
       parameters: *paramID
       responses:
         '200':
           description: Success
     delete:
-      summary: Delete a voucher code
+      summary: 'Delete a voucher code (role: admin)'
       tags:
-      - 'Voucher Codes (admin role)'
+      - 'Voucher Codes'
       security: *secAdmin
       parameters: *paramID
       responses:
@@ -928,10 +918,9 @@ paths:
           description: Success
   /partner_codes:
     get:
-      summary: List partner codes
+      summary: 'List partner codes (role: admin || partner)'
       tags:
-      - 'Partner Codes (admin role)'
-      - 'Partner Codes (partner role)'
+      - 'Partner Codes'
       security: *secPartner
       responses:
         '200':
@@ -943,19 +932,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/PartnerCode'
     post:
-      summary: Create new partner codes
+      summary: 'Create new partner codes (role: admin || partner)'
       tags:
-      - 'Partner Codes (admin role)'
-      - 'Partner Codes (partner role)'
+      - 'Partner Codes'
       security: *secPartner
       responses:
         '200':
           description: Success
   /partner_codes/{id}:
     put:
-      summary: Update a partner code
+      summary: 'Update a partner code (role: admin)'
       tags:
-      - 'Partner Codes (admin role)'
+      - 'Partner Codes'
       security: *secAdmin
       parameters: *paramID
       responses:
@@ -963,10 +951,9 @@ paths:
           description: Success
   /invoices:
     get:
-      summary: List all invoices
+      summary: 'List all invoices (role: admin || partner)'
       tags:
-      - 'Invoices (admin role)'
-      - 'Invoices (partner role)'
+      - 'Invoices'
       security: *secPartner
       responses:
         '200':
@@ -979,10 +966,9 @@ paths:
                   $ref: '#/components/schemas/Invoice'
   /invoices/{id}:
     get:
-      summary: Get invoice details
+      summary: 'Get invoice details (role: admin || partner)'
       tags:
-      - 'Invoices (admin role)'
-      - 'Invoices (partner role)'
+      - 'Invoices'
       security: *secPartner
       parameters: *paramID
       responses:
@@ -994,10 +980,9 @@ paths:
                 $ref: '#/components/schemas/Invoice'
   /invoice_recap:
     get:
-      summary: List monthly invoice recaps
+      summary: 'List monthly invoice recaps (role: admin || partner)'
       tags:
-      - 'Invoice Recaps (admin role)'
-      - 'Invoice Recaps (partner role)'
+      - 'Invoice Recaps'
       security: *secPartner
       responses:
         '200':
@@ -1010,10 +995,9 @@ paths:
                   $ref: '#/components/schemas/InvoiceRecap'
   /invoice_recap/{id}:
     get:
-      summary: Get invoice recap
+      summary: 'Get invoice recap (role: admin || partner)'
       tags:
-      - 'Invoice Recaps (admin role)'
-      - 'Invoice Recaps (partner role)'
+      - 'Invoice Recaps'
       security: *secPartner
       parameters: *paramID
       responses:
