@@ -872,9 +872,9 @@ paths:
       responses:
         '200':
           description: Success
-  /bookings/{id}/report:
+  /bookings/{id}/reschedule:
     put:
-      summary: 'Report booking (role: admin || partner)'
+      summary: 'Reschedule booking (role: admin || partner)'
       tags:
       - 'Bookings'
       security: *secPartner
@@ -904,6 +904,36 @@ paths:
       - 'Voucher Codes'
       security: *secAdmin
       parameters: *paramID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                expiration_date:
+                  type: string
+                  format: date-time
+                code_status:
+                  type: string
+                  enum: [available, in_use, to_check, cancelled]
+                code:
+                  type: string
+                company_order_id:
+                  type: string
+                company_id:
+                  type: string
+                balance:
+                  type: number
+                  minimum: 0
+                checkout_session_id:
+                  type: string
       responses:
         '200':
           description: Success
@@ -936,6 +966,25 @@ paths:
       tags:
       - 'Partner Codes'
       security: *secPartner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  activity_ids:
+                    type: array
+                    items:
+                      type: string
+                  expiration_date:
+                    type: string
+                    format: date-time
+                  partner_id:
+                    type: string
       responses:
         '200':
           description: Success
@@ -946,6 +995,26 @@ paths:
       - 'Partner Codes'
       security: *secAdmin
       parameters: *paramID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                activity_ids:
+                  type: array
+                  items:
+                    type: string
+                expiration_date:
+                  type: string
+                  format: date-time
+                partner_id:
+                  type: string
+                status:
+                  type: string
+                  enum: [valid, used, cancelled, expired]
       responses:
         '200':
           description: Success
