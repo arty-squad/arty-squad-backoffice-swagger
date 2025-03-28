@@ -396,28 +396,87 @@ components:
           type: string
         code:
           type: string
+        activity_ids:
+          type: array
+          items:
+            type: string
+        creation_date:
+          type: string
+          format: date-time
+        expiration_date:
+          type: string
+          format: date-time
+        google_sheet_id:
+          type: string
+        sheet:
+          type: string
+        partner_id:
+          type: string
         status:
           type: string
+          enum: [valid, used, cancelled, expired]
       example:
-        _id: 67c035c6f6793c078354c876
-        code: FAUX_CODE_9LWAE0S2
-        status: used
+        _id: "67d302db9eb4659fb7df77b8"
+        code: "example_12345"
+        activity_ids:
+          - "67c9c5e64313aab5e0fa904a"
+        creation_date: "2025-03-12T23:00:00.000Z"
+        expiration_date: "2026-03-12T23:00:00.000Z"
+        google_sheet_id: "1A2B3C4D5EFG6789EXAMPLEGOOGLESHEETID"
+        sheet: "CODE2"
+        partner_id: "67adb4bce6fdd25521ff5df7"
+        status: "used"
+
+
     VoucherCode:
       type: object
       properties:
         _id:
           type: string
-        code:
-          type: string
-        code_status:
-          type: string
         email:
           type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        creation_date:
+          type: string
+          format: date-time
+        expiration_date:
+          type: string
+          format: date-time
+        code_status:
+          type: string
+          enum: [available, in_use, to_check, cancelled]
+        code:
+          type: string
+        company_order_id:
+          type: string
+        company:
+          type: string
+        company_id:
+          type: string
+        balance:
+          type: number
+          minimum: 0
+        checkout_session_id:
+          type: string
       example:
-        _id: 67c5b136a03273cb23e6dd75
-        code: DUPOND_001_15346453
-        code_status: available
-        email: customer@gmail.com
+        _id: "67dd830bc975bcea5e226e1e"
+        email: "user@example.com"
+        first_name: "Marie"
+        last_name: "DURAND"
+        creation_date: "2025-03-21T15:17:31.490Z"
+        expiration_date: "2026-03-21T15:17:31.490Z"
+        code_status: "to_check"
+        code: "ACME_001_12345678"
+        company_order_id: "67c045fa2260a92ebde8b959"
+        company: "ACME Corp"
+        company_id: "67c045d32260a92ebde8b958"
+        balance: 50
+        checkout_session_id: "cs_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
 
 security: &secAdmin
 - BearerAuthAdmin: []
@@ -872,7 +931,7 @@ paths:
       summary: List partner codes
       tags:
       - 'Partner Codes (admin role)'
-      - 'Voucher Codes (partner role)'
+      - 'Partner Codes (partner role)'
       security: *secPartner
       responses:
         '200':
@@ -887,7 +946,7 @@ paths:
       summary: Create new partner codes
       tags:
       - 'Partner Codes (admin role)'
-      - 'Voucher Codes (partner role)'
+      - 'Partner Codes (partner role)'
       security: *secPartner
       responses:
         '200':
