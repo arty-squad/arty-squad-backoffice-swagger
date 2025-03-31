@@ -43,6 +43,7 @@ components:
           format: date-time
         role:
           type: string
+          enum: ["admin", "partner", "company", "user"]
       example:
         _id: 67d2bc99f0a0730d916a3fca
         email: test@artysquad.com
@@ -200,7 +201,7 @@ components:
           type: string
         status:
           type: string
-          enum: [to_validate, confirmed, cancelled, reported]
+          enum: [to_validate, confirmed, done, cancelled, to_reschedule]
       example:
         _id: "67d2bfef8538cd94cfef73da"
         activity_id: "67b474b0847affd92f166c60"
@@ -269,6 +270,7 @@ components:
           type: string
         creation_date:
           type: string
+          format: date-time
         activity_start:
           type: string
           format: HH:MM
@@ -314,7 +316,7 @@ components:
         _id: "67d303779eb4659fb7df77c8"
         invoice_id: "F25AS-PARTENAIRE-030001"
         due_date: "2025-03-13"
-        creation_date: "2025-03-13"
+        creation_date: "2025-03-13T20:00:00.000Z"
         activity_start: "12:00"
         activity_end: "14:00"
         customer_name: "Jean Dupont"
@@ -496,8 +498,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
     post:
@@ -519,6 +519,7 @@ paths:
                   type: string
                 role:
                   type: string
+                  enum: ["admin", "partner", "company", "user"]
                 partner_id:
                   type: string
               example:
@@ -533,7 +534,31 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
-  /users/{id}:
+  /users/{firebase_uid}:
+    get:
+      summary: 'View user details by Firebase UID (role: admin)'
+      tags:
+      - 'Users'
+      security: *secAdmin
+      parameters:
+      - name: firebase_uid
+        in: path
+        required: true
+        description: 'Firebase UID of the user'
+        schema:
+          type: string
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+
     put:
       summary: 'Update user informations (role: admin)'
       tags:
@@ -543,6 +568,7 @@ paths:
       - name: id
         in: path
         required: true
+        description: 'Object ID in MongoDB'
         schema:
           type: string
       requestBody:
@@ -560,11 +586,15 @@ paths:
                   type: string
                 partner_id:
                   type: string
+                password:
+                  type: string
+                  format: password
               example:
                 email: testartysquad+backoffice@gmail.com
                 name: Arty Squad
                 role: admin
                 partner_id: ""
+                password: passwordAB123@
       responses:
         '200':
           description: Success
@@ -778,7 +808,7 @@ paths:
           required: false
           schema:
             type: string
-            enum: [to_validate, confirmed, cancelled, reported]
+            enum: [to_validate, confirmed, cancelled, to_reschedule]
       responses:
         '200':
           description: Success
@@ -847,7 +877,7 @@ paths:
                   type: string
                 status:
                   type: string
-                  enum: [to_validate, confirmed, cancelled, reported]
+                  enum: [to_validate, confirmed, cancelled, to_reschedule]
       security: *secAdmin
       responses:
         '200':
