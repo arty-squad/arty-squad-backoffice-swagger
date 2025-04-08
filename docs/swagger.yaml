@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: Automatically generated Swagger documentation for all MongoDB collections
 servers:
-- url: https://api.artysquad.com/v1
+- url: https://ii6284.buildship.run
   description: Production Server
 components:
   securitySchemes:
