@@ -536,7 +536,7 @@ paths:
           description: Unauthorized
   /users/{firebase_uid}:
     get:
-      summary: 'View user details by Firebase UID (role: admin)'
+      summary: 'View user details by Firebase UID (role: admin || any)'
       tags:
       - 'Users'
       security: *secAdmin
