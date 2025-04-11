@@ -484,6 +484,50 @@ security: &secAdmin
 - BearerAuthAdmin: []
 
 paths:
+  /auth:
+    post:
+      summary: 'Authenticate user (role: no authentication)'
+      tags:
+      - 'Auth'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type:
+              required: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                  format: password
+              example:
+                email: "test@artysquad.com"
+                password: "passwordAB123@"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
   /users:
     get:
       summary: 'List all users (role: admin)'
