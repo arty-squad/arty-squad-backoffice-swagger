@@ -489,6 +489,11 @@ paths:
       summary: 'Authenticate user (role: no authentication)'
       tags:
       - 'Auth'
+      security: []
+      description: |
+        Authenticate user and return a JWT token. 
+        This endpoint is used to log in users. 
+        The token should be included in the `Authorization` header for all subsequent requests.
       requestBody:
         required: true
         content:
@@ -533,6 +538,9 @@ paths:
       summary: 'List all users (role: admin)'
       tags:
       - 'Users'
+      description: |
+        List all users in the system. 
+        This endpoint is used to retrieve user information.
       responses:
         '200':
           description: Success
@@ -548,6 +556,9 @@ paths:
       summary: 'Create a new user (role: admin)'
       tags:
       - 'Users'
+      description: |
+        Create a new user in the system (database and firebase). 
+        This endpoint is used to register new users.
       security: *secAdmin
       requestBody:
         required: true
@@ -583,6 +594,9 @@ paths:
       summary: 'View user details by Firebase UID (role: admin || any)'
       tags:
       - 'Users'
+      description: |
+        View user details by Firebase UID. 
+        This endpoint is used to retrieve user information.
       security: *secAdmin
       parameters:
       - name: firebase_uid
@@ -607,6 +621,9 @@ paths:
       summary: 'Update user informations (role: admin)'
       tags:
       - 'Users'
+      description: |
+        Update user information in the system (database and firebase). 
+        This endpoint is used to update user details.
       security: *secAdmin
       parameters: &paramID
       - name: id
