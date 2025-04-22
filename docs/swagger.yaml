@@ -85,6 +85,9 @@ components:
                   end:
                     type: string
                     format: HH:MM
+                  activity_datetime:
+                    type: string
+                    format: date-time
                   bookingIds:
                     type: array
                     items:
@@ -478,6 +481,57 @@ components:
         company_id: "67c045d32260a92ebde8b958"
         balance: 50
         checkout_session_id: "cs_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+    Session:
+      type: object
+      properties:
+        _id:
+          type: string
+        dateStr:
+          type: string
+          format: date
+        dateJS:
+          type: string
+          format: date-time
+        start:
+          type: string
+          format: HH:MM
+        end:
+          type: string
+          format: HH:MM
+        activity_datetime:
+          type: string
+          format: date-time
+        bookingIds:
+          type: array
+          items:
+            type: string
+        recurring:
+          type: boolean
+        recurring_first_date:
+          type: string
+          format: date
+        recurring_period:
+          type: string
+          enum: [week, month, day]
+        recurring_quantity:
+          type: integer
+          minimum: 2
+          maximum: 15
+      example:
+        _id: "67d2bfef8538cd94cfef73da"
+        dateStr: "2025-03-15"
+        dateJS: "2025-03-15T00:00:00.000Z"
+        start: "17:00"
+        end: "20:00"
+        activity_datetime: "2025-03-15T17:00:00.000Z"
+        bookingIds:
+          - "67d2bfef8538cd94cfef73du"
+          - "67d2bfef8538cd94cfef73dv"
+        recurring: false
+        recurring_first_date: null
+        recurring_period: null
+        recurring_quantity: null
 
 
 security: &secAdmin
@@ -970,6 +1024,24 @@ paths:
       - 'Bookings'
       security: *secPartner
       parameters: *paramID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activity_id:
+                  type: string
+                current_session:
+                  type: object
+                  schema:
+                    $ref: '#/components/schemas/Session'
+                new_sessions:
+                  type: array
+                  items:
+                    type: object
+                    schema:
+                      $ref: '#/components/schemas/Session'
       responses:
         '200':
           description: Success
