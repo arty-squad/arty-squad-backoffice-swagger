@@ -571,6 +571,8 @@ paths:
         Authenticate user and return a JWT token. 
         This endpoint is used to log in users. 
         The token should be included in the `Authorization` header for all subsequent requests.
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       requestBody:
         required: true
         content:
