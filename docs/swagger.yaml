@@ -540,8 +540,8 @@ components:
       required: false
       description: Set to `true` to enable test mode.
       schema:
-        type: string
-        enum: ["true", "false"]
+        type: boolean
+        default: false
     FirebaseUIDQueryParam:
       name: firebase_uid
       in: path
