@@ -5,7 +5,7 @@ info:
   description: Automatically generated Swagger documentation for all MongoDB collections
 servers:
 - url: https://ii6284.buildship.run
-  description: Production Server
+  description: Buildship Backend Server
 components:
   securitySchemes:
     BearerAuthAdmin:
