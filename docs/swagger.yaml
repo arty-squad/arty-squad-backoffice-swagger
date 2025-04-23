@@ -541,7 +541,7 @@ components:
       description: Set to `true` to enable test mode.
       schema:
         type: string
-        enum: ["true"]
+        enum: ["true", "false"]
     FirebaseUIDQueryParam:
       name: firebase_uid
       in: path
@@ -578,8 +578,7 @@ paths:
         content:
           application/json:
             schema:
-              type:
-              required: object
+              type: object
               properties:
                 email:
                   type: string
@@ -704,7 +703,7 @@ paths:
         Update user information in the system (database and firebase). 
         This endpoint is used to update user details.
       parameters:
-      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/FirebaseUIDQueryParam'
       - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
       requestBody:
@@ -743,7 +742,7 @@ paths:
       tags:
       - 'Users'
       parameters:
-      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/FirebaseUIDQueryParam'
       - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
       responses:
@@ -1097,14 +1096,16 @@ paths:
                   type: string
                 current_session:
                   type: object
-                  schema:
-                    $ref: '#/components/schemas/Session'
+                  properties:
+                    schema:
+                      $ref: '#/components/schemas/Session'
                 new_sessions:
                   type: array
                   items:
                     type: object
-                    schema:
-                      $ref: '#/components/schemas/Session'
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/Session'
       responses:
         '200':
           description: Success
