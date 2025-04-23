@@ -533,6 +533,29 @@ components:
         recurring_period: null
         recurring_quantity: null
 
+  parameters:
+    TestModeHeader:
+      name: Test-Mode
+      in: header
+      required: false
+      description: Set to `true` to enable test mode.
+      schema:
+        type: string
+        enum: ["true"]
+    FirebaseUIDQueryParam:
+      name: firebase_uid
+      in: path
+      required: true
+      description: 'Firebase UID of the user'
+      schema:
+        type: string
+    MongoIDQueryParam:
+      name: id
+      in: path
+      required: true
+      description: 'Object ID in MongoDB'
+      schema:
+        type: string
 
 security: &secAdmin
 - BearerAuthAdmin: []
@@ -595,6 +618,8 @@ paths:
       description: |
         List all users in the system. 
         This endpoint is used to retrieve user information.
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       responses:
         '200':
           description: Success
@@ -613,6 +638,8 @@ paths:
       description: |
         Create a new user in the system (database and firebase). 
         This endpoint is used to register new users.
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
       requestBody:
         required: true
@@ -651,25 +678,21 @@ paths:
       description: |
         View user details by Firebase UID. 
         This endpoint is used to retrieve user information.
-      security: *secAdmin
       parameters:
-      - name: firebase_uid
-        in: path
-        required: true
-        description: 'Firebase UID of the user'
-        schema:
-          type: string
-        responses:
-          '200':
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/User'
-          '400':
-            description: Bad Request
-          '401':
-            description: Unauthorized
+      - $ref: '#/components/parameters/FirebaseUIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
+      security: *secAdmin
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
 
     put:
       summary: 'Update user informations (role: admin)'
@@ -678,14 +701,10 @@ paths:
       description: |
         Update user information in the system (database and firebase). 
         This endpoint is used to update user details.
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
-      parameters: &paramID
-      - name: id
-        in: path
-        required: true
-        description: 'Object ID in MongoDB'
-        schema:
-          type: string
       requestBody:
         required: true
         content:
@@ -721,8 +740,10 @@ paths:
       summary: 'Delete user (role: admin)'
       tags:
       - 'Users'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -735,6 +756,8 @@ paths:
       summary: 'List all partners (role: admin)'
       tags:
       - 'Partners'
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
       responses:
         '200':
@@ -750,9 +773,11 @@ paths:
       summary: 'View partner profile (role: partner)'
       tags:
       - 'Partners'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: &secPartner
       - BearerAuthPartner: []
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -764,8 +789,10 @@ paths:
       summary: 'Update partner profile (role: partner)'
       tags:
       - 'Partners'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       requestBody:
         required: true
         content:
@@ -800,6 +827,8 @@ paths:
       summary: 'List activities (role: admin || partner)'
       tags:
       - 'Activities'
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
       responses:
         '200':
@@ -815,8 +844,10 @@ paths:
       summary: 'View activity details (role: admin || partner)'
       tags:
       - 'Activities'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -829,8 +860,10 @@ paths:
       summary: 'Add session(s) to activity calendar (role: admin || partner)'
       tags:
       - 'Activities'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       requestBody:
         required: true
         content:
@@ -854,6 +887,9 @@ paths:
       summary: 'Edit session(s) in activity calendar (role: admin || partner)'
       tags:
       - 'Activities'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
       requestBody:
         required: true
@@ -874,7 +910,6 @@ paths:
                 new_activity_id: 67c035c6f6793c078354c876
                 date: "2025-04-15"
                 start: "15:00"
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -883,8 +918,10 @@ paths:
       summary: 'Delete session(s) from activity calendar (role: admin || partner)'
       tags:
       - 'Activities'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       requestBody:
         required: true
         content:
@@ -908,22 +945,22 @@ paths:
       summary: 'List all bookings - filterable by time or status (role: admin || partner)'
       tags:
       - 'Bookings'
-      security: *secPartner
       parameters:
-        - name: time
-          in: query
-          description: Filter bookings by time ("past" or "future")
-          required: false
-          schema:
-            type: string
-            enum: [past, future]
-        - name: status
-          in: query
-          description: Filter bookings by status (e.g., to_validate, confirmed)
-          required: false
-          schema:
-            type: string
-            enum: [to_validate, confirmed, cancelled, to_reschedule]
+      - $ref: '#/components/parameters/TestModeHeader'
+      - name: time
+        in: query
+        description: Filter bookings by time ("past" or "future")
+        required: false
+        schema:
+          type: string
+          enum: [past, future]
+      - name: status
+        in: query
+        description: Filter bookings by status (e.g., to_validate, confirmed)
+        required: false
+        schema:
+          type: string
+          enum: [to_validate, confirmed, cancelled, to_reschedule]
       # requestBody:
       #   required: true
       #   content:
@@ -937,6 +974,7 @@ paths:
       #           status:
       #             type: string
       #             enum: [to_validate, confirmed, cancelled, to_reschedule]
+      security: *secPartner
       responses:
         '200':
           description: Success
@@ -951,8 +989,10 @@ paths:
       summary: 'View booking (role: admin)'
       tags:
       - 'Bookings'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -964,7 +1004,10 @@ paths:
       summary: 'Update booking (role: admin)'
       tags:
       - 'Bookings'
-      parameters: *paramID
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
+      security: *secAdmin
       requestBody:
         content:
           application/json:
@@ -1006,7 +1049,6 @@ paths:
                 status:
                   type: string
                   enum: [to_validate, confirmed, cancelled, to_reschedule]
-      security: *secAdmin
       responses:
         '200':
           description: Success
@@ -1015,8 +1057,10 @@ paths:
       summary: 'Validate booking (role: admin || partner)'
       tags:
       - 'Bookings'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -1025,8 +1069,10 @@ paths:
       summary: 'Cancel booking (role: admin || partner)'
       tags:
       - 'Bookings'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -1035,8 +1081,10 @@ paths:
       summary: 'Reschedule booking (role: admin || partner)'
       tags:
       - 'Bookings'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       requestBody:
         content:
           application/json:
@@ -1063,6 +1111,8 @@ paths:
       summary: 'List all voucher codes (role: admin)'
       tags:
       - 'Voucher Codes'
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
       responses:
         '200':
@@ -1078,8 +1128,10 @@ paths:
       summary: 'Update a voucher code (role: admin)'
       tags:
       - 'Voucher Codes'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
-      parameters: *paramID
       requestBody:
         content:
           application/json:
@@ -1117,8 +1169,10 @@ paths:
       summary: 'Delete a voucher code (role: admin)'
       tags:
       - 'Voucher Codes'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -1127,6 +1181,8 @@ paths:
       summary: 'List partner codes (role: admin || partner)'
       tags:
       - 'Partner Codes'
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
       responses:
         '200':
@@ -1141,6 +1197,8 @@ paths:
       summary: 'Create new partner codes (role: admin || partner)'
       tags:
       - 'Partner Codes'
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
       requestBody:
         content:
@@ -1169,8 +1227,10 @@ paths:
       summary: 'Update a partner code (role: admin)'
       tags:
       - 'Partner Codes'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secAdmin
-      parameters: *paramID
       requestBody:
         content:
           application/json:
@@ -1199,6 +1259,8 @@ paths:
       summary: 'List all invoices (role: admin || partner)'
       tags:
       - 'Invoices'
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
       responses:
         '200':
@@ -1214,8 +1276,10 @@ paths:
       summary: 'Get invoice details (role: admin || partner)'
       tags:
       - 'Invoices'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       responses:
         '200':
           description: Success
@@ -1228,6 +1292,8 @@ paths:
       summary: 'List monthly invoice recaps (role: admin || partner)'
       tags:
       - 'Invoice Recaps'
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
       responses:
         '200':
@@ -1243,8 +1309,10 @@ paths:
       summary: 'Get invoice recap (role: admin || partner)'
       tags:
       - 'Invoice Recaps'
+      parameters:
+      - $ref: '#/components/parameters/MongoIDQueryParam'
+      - $ref: '#/components/parameters/TestModeHeader'
       security: *secPartner
-      parameters: *paramID
       responses:
         '200':
           description: Success
