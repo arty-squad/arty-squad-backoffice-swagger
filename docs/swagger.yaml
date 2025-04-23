@@ -85,7 +85,7 @@ components:
                   end:
                     type: string
                     format: HH:MM
-                  activity_datetime:
+                  session_datetime:
                     type: string
                     format: date-time
                   bookingIds:
@@ -499,7 +499,7 @@ components:
         end:
           type: string
           format: HH:MM
-        activity_datetime:
+        session_datetime:
           type: string
           format: date-time
         bookingIds:
@@ -524,7 +524,7 @@ components:
         dateJS: "2025-03-15T00:00:00.000Z"
         start: "17:00"
         end: "20:00"
-        activity_datetime: "2025-03-15T17:00:00.000Z"
+        session_datetime: "2025-03-15T17:00:00.000Z"
         bookingIds:
           - "67d2bfef8538cd94cfef73du"
           - "67d2bfef8538cd94cfef73dv"
@@ -904,26 +904,39 @@ paths:
         '200':
           description: Success
   /bookings:
-    get:
+    post:
       summary: 'List all bookings - filterable by time or status (role: admin || partner)'
       tags:
       - 'Bookings'
       security: *secPartner
-      parameters:
-        - name: time
-          in: query
-          description: Filter bookings by time ("past" or "future")
-          required: false
-          schema:
-            type: string
-            enum: [past, future]
-        - name: status
-          in: query
-          description: Filter bookings by status (e.g., to_validate, confirmed)
-          required: false
-          schema:
-            type: string
-            enum: [to_validate, confirmed, cancelled, to_reschedule]
+      # parameters:
+      #   - name: time
+      #     in: query
+      #     description: Filter bookings by time ("past" or "future")
+      #     required: false
+      #     schema:
+      #       type: string
+      #       enum: [past, future]
+      #   - name: status
+      #     in: query
+      #     description: Filter bookings by status (e.g., to_validate, confirmed)
+      #     required: false
+      #     schema:
+      #       type: string
+      #       enum: [to_validate, confirmed, cancelled, to_reschedule]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time:
+                  type: string
+                  enum: [past, future]
+                status:
+                  type: string
+                  enum: [to_validate, confirmed, cancelled, to_reschedule]
       responses:
         '200':
           description: Success
