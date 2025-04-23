@@ -904,39 +904,39 @@ paths:
         '200':
           description: Success
   /bookings:
-    post:
+    get:
       summary: 'List all bookings - filterable by time or status (role: admin || partner)'
       tags:
       - 'Bookings'
       security: *secPartner
-      # parameters:
-      #   - name: time
-      #     in: query
-      #     description: Filter bookings by time ("past" or "future")
-      #     required: false
-      #     schema:
-      #       type: string
-      #       enum: [past, future]
-      #   - name: status
-      #     in: query
-      #     description: Filter bookings by status (e.g., to_validate, confirmed)
-      #     required: false
-      #     schema:
-      #       type: string
-      #       enum: [to_validate, confirmed, cancelled, to_reschedule]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                time:
-                  type: string
-                  enum: [past, future]
-                status:
-                  type: string
-                  enum: [to_validate, confirmed, cancelled, to_reschedule]
+      parameters:
+        - name: time
+          in: query
+          description: Filter bookings by time ("past" or "future")
+          required: false
+          schema:
+            type: string
+            enum: [past, future]
+        - name: status
+          in: query
+          description: Filter bookings by status (e.g., to_validate, confirmed)
+          required: false
+          schema:
+            type: string
+            enum: [to_validate, confirmed, cancelled, to_reschedule]
+      # requestBody:
+      #   required: true
+      #   content:
+      #     application/json:
+      #       schema:
+      #         type: object
+      #         properties:
+      #           time:
+      #             type: string
+      #             enum: [past, future]
+      #           status:
+      #             type: string
+      #             enum: [to_validate, confirmed, cancelled, to_reschedule]
       responses:
         '200':
           description: Success
