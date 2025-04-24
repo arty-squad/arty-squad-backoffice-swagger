@@ -877,6 +877,15 @@ paths:
                   type: string
                 start:
                   type: string
+                recurring:
+                  type: boolean
+                recurring_period:
+                  type: string
+                  enum: [week, month, day]
+                recurring_quantity:
+                  type: integer
+                  minimum: 2
+                  maximum: 15
               example:
                 date: "2025-04-15"
                 start: "15:00"
