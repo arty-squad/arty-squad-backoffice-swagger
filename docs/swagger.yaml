@@ -535,7 +535,7 @@ components:
 
   parameters:
     TestModeHeader:
-      name: Test-Mode
+      name: testmode
       in: header
       required: false
       description: Set to `true` to enable test mode.
