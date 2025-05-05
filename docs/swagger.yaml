@@ -1105,16 +1105,11 @@ paths:
                   type: string
                 current_session:
                   type: object
-                  properties:
-                    schema:
-                      $ref: '#/components/schemas/Session'
+                  $ref: '#/components/schemas/Session'
                 new_sessions:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      schema:
-                        $ref: '#/components/schemas/Session'
+                    $ref: '#/components/schemas/Session'
       responses:
         '200':
           description: Success
