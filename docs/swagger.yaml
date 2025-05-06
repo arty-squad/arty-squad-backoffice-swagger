@@ -598,8 +598,59 @@ paths:
                 properties:
                   token:
                     type: string
+                  refresh_token:
+                    type: string
                   user:
                     $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+  /refresh_token:
+    post:
+      summary: 'Refresh token (role: no authentication)'
+      tags:
+      - 'Auth'
+      security: []
+      description: |
+        Refresh a JWT token thanks to a refresh token.
+        The refresh token should be included in the body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+              example:
+                refresh_token: "AMf-vBzLROHH1di2PqYJxdnNnnz_yojuxy4BZxjkZ-IypO7x_wTCjW4PbH90KFk-5aJuRraN91sO3TSuJjZjRtY4J1HKclyNuv1NrahDIoMDw1ip1yFDmwi5QY0Omg4YZGk_vl6HB6SngA6I--XE0SA8Lh8jixWwtmkBc7Xj9V1uUE-q_nF1-I6G5G_U3Lhc7pSkaVwOCdbotJCbR9NhdH0D78wqmtBq1shVT0xqa6k5C46fivsLxmo"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  idToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  uid:
+                    type: string
+                  expiresIn:
+                    type: string  
         '400':
           description: Bad Request
           content:
@@ -1327,4 +1378,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceRecap'
-
