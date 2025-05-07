@@ -996,7 +996,7 @@ paths:
                   $ref: '#/components/schemas/Booking'
   /bookings/{id}:
     get:
-      summary: 'View booking (role: admin)'
+      summary: 'View booking (role: admin || partner)'
       tags:
       - 'Bookings'
       parameters:
