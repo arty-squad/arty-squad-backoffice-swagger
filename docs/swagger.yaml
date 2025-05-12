@@ -872,7 +872,7 @@ paths:
                   type: string
                 vat:
                   type: number
-                  enum: [0, 5.5, 10, 20]
+                  enum: [0, 2.1, 5.5, 10, 20]
       responses:
         '200':
           description: Success
