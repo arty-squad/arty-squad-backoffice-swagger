@@ -386,6 +386,13 @@ components:
           type: string
         airtable_id:
           type: string
+        siret:
+          type: string
+        naf:
+          type: string
+        vat:
+          type: number
+          enum: [0, 2.1, 5.5, 10, 20]
       example:
         _id: 67ab424f02a0c72b69aaf3a7
         name: Fluffy's
@@ -396,6 +403,9 @@ components:
         address: '44 rue de Cléry'
         website: https://www.fluffysparis.com/
         airtable_id: rec1a2b3c4d5e6f7g8h9i0j
+        siret: 12345678901234
+        naf: 1234Z
+        vat: 20
     PartnerCode:
       type: object
       properties:
