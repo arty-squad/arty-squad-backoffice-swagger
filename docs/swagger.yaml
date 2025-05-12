@@ -986,9 +986,9 @@ paths:
       responses:
         '200':
           description: Success
-  /activities/{id}/calendar/delete:
+  /activities/{id}/calendar/remove:
     put:
-      summary: 'Delete session(s) from activity calendar (role: admin || partner)'
+      summary: 'Remove session(s) from activity calendar (role: admin || partner)'
       tags:
       - 'Activities'
       parameters:
@@ -1001,15 +1001,15 @@ paths:
           application/json:
             schema:
               type: object
-              required: [date, start]
+              required: [date, session_id]
               properties:
                 date:
                   type: string
-                start:
+                session_id:
                   type: string
               example:
                 date: "2025-04-15"
-                start: "15:00"
+                session_id: 67d2bfef8538cd94cfef73da
       responses:
         '200':
           description: Success
