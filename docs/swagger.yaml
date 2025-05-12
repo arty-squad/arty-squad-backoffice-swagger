@@ -384,6 +384,8 @@ components:
           type: string
         website:
           type: string
+        airtable_id:
+          type: string
       example:
         _id: 67ab424f02a0c72b69aaf3a7
         name: Fluffy's
@@ -393,7 +395,7 @@ components:
         bio: Diplômée d’un CAP Pâtisserie à l’école Ferrandi et d’un master 2 Entreprenariat en école de commerce, Hortense commence sa carrière au prestigieux...
         address: '44 rue de Cléry'
         website: https://www.fluffysparis.com/
-        
+        airtable_id: rec1a2b3c4d5e6f7g8h9i0j
     PartnerCode:
       type: object
       properties:
