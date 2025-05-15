@@ -384,15 +384,6 @@ components:
           type: string
         website:
           type: string
-        airtable_id:
-          type: string
-        siret:
-          type: string
-        naf:
-          type: string
-        vat:
-          type: number
-          enum: [0, 2.1, 5.5, 10, 20]
       example:
         _id: 67ab424f02a0c72b69aaf3a7
         name: Fluffy's
@@ -402,10 +393,7 @@ components:
         bio: Diplômée d’un CAP Pâtisserie à l’école Ferrandi et d’un master 2 Entreprenariat en école de commerce, Hortense commence sa carrière au prestigieux...
         address: '44 rue de Cléry'
         website: https://www.fluffysparis.com/
-        airtable_id: rec1a2b3c4d5e6f7g8h9i0j
-        siret: 12345678901234
-        naf: 1234Z
-        vat: 20
+        
     PartnerCode:
       type: object
       properties:
@@ -497,7 +485,7 @@ components:
     Session:
       type: object
       properties:
-        _id:
+        session_id:
           type: string
         dateStr:
           type: string
@@ -531,7 +519,7 @@ components:
           minimum: 2
           maximum: 15
       example:
-        _id: "67d2bfef8538cd94cfef73da"
+        session_id: "67d2bfef8538cd94cfef73da"
         dateStr: "2025-03-15"
         dateJS: "2025-03-15T00:00:00.000Z"
         start: "17:00"
@@ -544,6 +532,14 @@ components:
         recurring_first_date: null
         recurring_period: null
         recurring_quantity: null
+        
+    NewSession:
+      type: object
+      properties:
+        session_id:
+          type: string
+      example:
+        session_id: "67d2bfef8538cd94cfef73da"
 
   parameters:
     TestModeHeader:
@@ -882,7 +878,7 @@ paths:
                   type: string
                 vat:
                   type: number
-                  enum: [0, 2.1, 5.5, 10, 20]
+                  enum: [0, 5.5, 10, 20]
       responses:
         '200':
           description: Success
@@ -972,23 +968,23 @@ paths:
               type: object
               required: [date, start]
               properties:
-                session_id:
+                new_activity_id:
                   type: string
                 date:
                   type: string
                   format: date
-                new_activity_id:
+                start:
                   type: string
               example:
-                new_activity_id: 67c035c6f6793c078354c876s
-                session_id: 67d2bfef8538cd94cfef73da
+                new_activity_id: 67c035c6f6793c078354c876
                 date: "2025-04-15"
+                start: "15:00"
       responses:
         '200':
           description: Success
-  /activities/{id}/calendar/remove:
+  /activities/{id}/calendar/delete:
     put:
-      summary: 'Remove session(s) from activity calendar (role: admin || partner)'
+      summary: 'Delete session(s) from activity calendar (role: admin || partner)'
       tags:
       - 'Activities'
       parameters:
@@ -1001,15 +997,15 @@ paths:
           application/json:
             schema:
               type: object
-              required: [date, session_id]
+              required: [date, start]
               properties:
                 date:
                   type: string
-                session_id:
+                start:
                   type: string
               example:
                 date: "2025-04-15"
-                session_id: 67d2bfef8538cd94cfef73da
+                start: "15:00"
       responses:
         '200':
           description: Success
@@ -1059,7 +1055,7 @@ paths:
                   $ref: '#/components/schemas/Booking'
   /bookings/{id}:
     get:
-      summary: 'View booking (role: admin || partner)'
+      summary: 'View booking (role: admin)'
       tags:
       - 'Bookings'
       parameters:
@@ -1166,29 +1162,13 @@ paths:
               properties:
                 activity_id:
                   type: string
-                current_session_id:
-                  type: string
-                current_date:
-                  type: string
-                  format: date
+                current_session:
+                  type: object
+                  $ref: '#/components/schemas/Session'
                 new_sessions:
                   type: array
                   items:
-                    properties:
-                      session_id:
-                        type: string
-                      date:
-                        type: string
-                        format: date
-              example:
-                activity_id: 67c035c6f6793c078354c876
-                current_session_id: 67d2bfef8538cd94cfef73da
-                current_date: "2025-04-15"
-                new_sessions:
-                  - session_id: 67d2bfef8538cd94cfef73da
-                    date: "2025-04-16"
-                  - session_id: 67d2bfef8538cd94cfef73db
-                    date: "2025-04-17"
+                    $ref: '#/components/schemas/NewSession'
       responses:
         '200':
           description: Success
