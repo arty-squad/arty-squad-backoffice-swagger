@@ -1207,18 +1207,13 @@ paths:
                     properties:
                       session_id:
                         type: string
-                      date:
-                        type: string
-                        format: date
               example:
                 activity_id: 67c035c6f6793c078354c876
                 current_session_id: 67d2bfef8538cd94cfef73da
                 current_date: "2025-04-15"
                 new_sessions:
                   - session_id: 67d2bfef8538cd94cfef73da
-                    date: "2025-04-16"
                   - session_id: 67d2bfef8538cd94cfef73db
-                    date: "2025-04-17"
       responses:
         '200':
           description: Success
