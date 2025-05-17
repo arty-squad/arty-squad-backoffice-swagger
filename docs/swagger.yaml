@@ -119,18 +119,21 @@ components:
             - dateStr: '2025-02-01'
               start: '17:00'
               end: '20:00'
+              session_datetime: '2025-02-01T17:00:00.000Z'
               bookingIds: []
               recurring: false
           '2025-02-15':
             - dateStr: '2025-02-15'
               start: '17:00'
               end: '20:00'
+              session_datetime: '2025-02-15T17:00:00.000Z'
               recurring: false
               bookingIds: ["67d2bfef8538cd94cfef73da"]
           '2025-03-15':
             - dateStr: '2025-03-15'
               start: '17:00'
               end: '20:00'
+              session_datetime: '2025-03-15T17:00:00.000Z'
               recurring: false
               bookingIds: []
 
@@ -625,6 +628,29 @@ paths:
                     type: string
                   message:
                     type: string
+  /me:
+    get:
+      summary: 'Get user profile (role: any)'
+      tags:
+      - 'Auth'
+      security:
+      - BearerAuthAdmin: []
+      - BearerAuthPartner: []
+      description: |
+        Get user profile information. 
+        This endpoint is used to retrieve the authenticated user's information.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
   /refresh_token:
     post:
       summary: 'Refresh token (role: no authentication)'
@@ -720,10 +746,14 @@ paths:
                 role:
                   type: string
                   enum: ["admin", "partner", "company", "user"]
+                password:
+                  type: string
+                  format: password
                 partner_id:
                   type: string
               example:
                 email: testartysquad+backoffice@gmail.com
+                password: ""
                 name: Arty Squad
                 role: admin
                 partner_id: ""
