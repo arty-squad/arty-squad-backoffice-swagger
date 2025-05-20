@@ -332,10 +332,10 @@ components:
         experience_name: "Atelier créatif en cuir personnalisé"
         description: "Tout le matériel est fourni sur place.\nUn atelier est disponible dans vos locaux et privatisé."
         quantity: 1
-        unit_price: 139
-        subtotal: 139
+        unit_price: 139.11
+        subtotal: 139.11
         discount: 0
-        total: 139
+        total: 139.11
         vat: 23.17
         partner_name: "Nom du Partenaire"
         partner_mail: "contact@partenaire.com"
