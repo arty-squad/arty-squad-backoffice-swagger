@@ -1004,15 +1004,23 @@ paths:
               properties:
                 session_id:
                   type: string
+                current_date:
+                  type: string
+                  format: date
                 date:
                   type: string
                   format: date
+                start:
+                  type: string
+                  format: HH:MM
                 new_activity_id:
                   type: string
               example:
                 new_activity_id: 67c035c6f6793c078354c876s
                 session_id: 67d2bfef8538cd94cfef73da
-                date: "2025-04-15"
+                current_date: "2025-04-15"
+                date: "2025-04-16"
+                start: "15:00"
       responses:
         '200':
           description: Success
