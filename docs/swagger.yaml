@@ -1157,13 +1157,10 @@ paths:
               properties:
                 activity_id:
                   type: string
-                activity_date:
+                partner_id:
                   type: string
-                  format: date
-                activity_start:
+                session_id:
                   type: string
-                  format: HH:MM
-                  pattern: '^\d{2}:\d{2}$'
                 price_per_person:
                   type: integer
                 quantity:
@@ -1180,7 +1177,7 @@ paths:
                 code_used:
                   type: string
                 amount_discount:
-                  type: string
+                  type: number
                 stripe_checkout_id:
                   type: string
                 access_code:
