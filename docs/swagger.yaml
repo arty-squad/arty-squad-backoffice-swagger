@@ -583,7 +583,7 @@ paths:
       - 'Auth'
       security: []
       description: |
-        Authenticate user and return a JWT token. 
+        Authenticate user and return a JWT token, a refresh token and the user information. 
         This endpoint is used to log in users. 
         The token should be included in the `Authorization` header for all subsequent requests.
       parameters:
@@ -639,18 +639,36 @@ paths:
       description: |
         Get user profile information. 
         This endpoint is used to retrieve the authenticated user's information.
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  user:
-                    $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/User'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                  message:
+                    type: string
+                  label:
+                    type: string
+                example:
+                  error:
+                    message: "Unauthorised request: Firebase ID token has invalid signature. See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
+                  message: "Unauthorised request: Firebase ID token has invalid signature. See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
+                  label: "Firebase Auth Request"
   /refresh_token:
     post:
       summary: 'Refresh token (role: no authentication)'
@@ -660,6 +678,8 @@ paths:
       description: |
         Refresh a JWT token thanks to a refresh token.
         The refresh token should be included in the body.
+      parameters:
+      - $ref: '#/components/parameters/TestModeHeader'
       requestBody:
         required: true
         content:
