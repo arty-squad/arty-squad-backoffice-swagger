@@ -708,7 +708,13 @@ paths:
                   uid:
                     type: string
                   expiresIn:
-                    type: string  
+                    type: string
+                example:
+                  success: true
+                  idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjE2YjY0YzQwLTIxYjItNGM5Ny05ZDYyLTQ3N2Q4Mjk0YjA0YSIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2FydHlzY3VhZC5jb20iLCJzdWIiOiI2N2QyYmNlZjg1MzhjZDk0Y2ZlZjczZGEiLCJpc3MiOiJmaXJlYmFzZSIsImV4cCI6MTY4NjU1MzA5OSwiaWF0IjoxNjg2NTQ5NDk5fQ.8b7a"
+                  refreshToken: "AMf-vBz..."
+                  uid: "67d2bc99f0a0730d916a3fca"
+                  expiresIn: "3600"
         '400':
           description: Bad Request
           content:
@@ -716,10 +722,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
+                  success:
+                    type: boolean
                   message:
                     type: string
+                example:
+                  success: false
+                  message: "INVALID_REFRESH_TOKEN"
+
   /users:
     get:
       summary: 'List all users (role: admin)'
