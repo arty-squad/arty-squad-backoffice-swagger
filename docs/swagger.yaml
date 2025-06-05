@@ -30,6 +30,8 @@ components:
     User:
       type: object
       properties:
+        success:
+          type: boolean
         _id:
           type: string
         email:
@@ -44,13 +46,18 @@ components:
         role:
           type: string
           enum: ["admin", "partner", "company", "user"]
+        testmode:
+          type: boolean
+          description: Indicates if the user is in test mode
       example:
+        success: true
         _id: 67d2bc99f0a0730d916a3fca
         email: test@artysquad.com
         uid: E0oVVP9aXqNpMwBeKThAkZXuuI33
         name: test
         createdAt: '2025-03-10T00:00:00Z'
         role: admin
+        testmode: false
 
     Activity:
       type: object
@@ -639,8 +646,6 @@ paths:
       description: |
         Get user profile information. 
         This endpoint is used to retrieve the authenticated user's information.
-      parameters:
-      - $ref: '#/components/parameters/TestModeHeader'
       responses:
         '200':
           description: Success
@@ -655,6 +660,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  success:
+                    type: boolean
                   error:
                     type: object
                     properties:
@@ -1202,6 +1209,18 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                example:
+                  success: true
+                  message: "Booking validated successfully"
   /bookings/{id}/cancel:
     put:
       summary: 'Cancel booking (role: admin || partner)'
@@ -1214,6 +1233,18 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                example:
+                  success: true
+                  message: "Booking cancelled successfully"
   /bookings/{id}/reschedule:
     put:
       summary: 'Reschedule booking (role: admin || partner)'
