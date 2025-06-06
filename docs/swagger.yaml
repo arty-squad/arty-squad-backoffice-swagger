@@ -1019,6 +1019,9 @@ paths:
               example:
                 date: "2025-04-15"
                 start: "15:00"
+                recurring: true
+                recurring_period: week
+                recurring_quantity: 5
       responses:
         '200':
           description: Success
